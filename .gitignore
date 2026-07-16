@@ -1,4 +1,4 @@
 .vscode
-/HelloApi/bin/Release
+/HelloApi/bin/
 /HelloApi/obj/Release
 /HelloApi/obj/Debug
