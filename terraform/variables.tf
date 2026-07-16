@@ -19,6 +19,11 @@ variable "app_service_name" {
   type = string
 }
 
+variable "logic_app_name" {
+  description = "Name of the Logic App"
+  type        = string
+}
+
 variable "location" {
   type = string
 }

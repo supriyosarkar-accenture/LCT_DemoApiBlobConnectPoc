@@ -29,3 +29,12 @@ module "app_service" {
 
   tags = local.common_tags
 }
+
+module "logic_app" {
+
+  source              = "./modules/logic-app"
+  logic_app_name      = var.logic_app_name
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+  tags                = local.common_tags
+}
