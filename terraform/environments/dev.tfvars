@@ -1,9 +1,7 @@
-resource_group_name = "rg-lct-demo-poc-1"
-
-location = "Central India"
-
-environment = "dev"
-
-storage_account_name = "stalctdemopoc1"
-
-blob_container_name = "api-output"
+resource_group_name   = "rg-lct-demo-poc-1"
+location              = "Central India"
+environment           = "dev"
+storage_account_name  = "stalctdemopoc1"
+app_service_plan_name = "asp-lct-demo"
+app_service_name      = "helloapi"
+blob_container_name   = "api-output"

@@ -17,3 +17,15 @@ module "storage_account" {
   blob_container_name  = var.blob_container_name
   tags                 = local.common_tags
 }
+
+module "app_service" {
+  source = "./modules/app-service"
+
+  app_service_plan_name = var.app_service_plan_name
+  app_service_name      = var.app_service_name
+
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+
+  tags = local.common_tags
+}
