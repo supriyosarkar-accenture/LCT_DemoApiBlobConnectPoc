@@ -19,8 +19,8 @@
 ## API
 
 -   Build locally.
--   Publish using: `dotnet publish -c Release`
--   Deploy the **publish** folder to Azure App Service.
+-   Publish using: `dotnet publish -c Release -o ./bin/Publish`
+-   Deploy the **Publish** folder to Azure App Service.
 
 ## Managed Identity
 
