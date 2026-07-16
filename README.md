@@ -214,38 +214,6 @@ instead of the project root.
 
 ---
 
-# Learning Outcomes
-
-This PoC demonstrates:
-
-- Azure App Service deployment
-- ASP.NET Core REST APIs
-- Azure Logic Apps
-- Managed Identity
-- Azure RBAC
-- Azure Blob Storage
-- Dynamic Expressions
-- Secure Azure Integration
-- Troubleshooting Azure App Service deployments
-
----
-
-# Future Enhancements
-
-This repository will be extended with:
-
-- Azure API Management
-- Azure Event Grid
-- Azure Service Bus
-- Azure Event Hubs
-- Azure Functions
-- Azure Key Vault
-- Application Insights
-- Terraform
-- Azure DevOps CI/CD
-- Private Endpoints
-
----
 
 # Author
 
