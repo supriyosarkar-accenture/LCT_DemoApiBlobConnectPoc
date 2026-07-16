@@ -1,45 +1,256 @@
-# Azure App Service → Logic App → Blob Storage POC
+# Azure App Service → Logic App → Azure Blob Storage Integration PoC
 
 ## Overview
 
-This Proof of Concept demonstrates how to integrate an ASP.NET Core Web
-API hosted on Azure App Service with an Azure Logic App. The Logic App
-invokes the API, retrieves a JSON payload, and stores it in Azure Blob
-Storage using a Managed Identity authenticated Blob Storage connector.
+This Proof of Concept (PoC) demonstrates an end-to-end Azure integration where an **ASP.NET Core (.NET 8) Web API** hosted on **Azure App Service** is periodically invoked by an **Azure Logic App**. The Logic App retrieves a JSON response from the API and stores it as a **timestamped JSON file** in **Azure Blob Storage** using **Managed Identity**, eliminating the need for storage account keys or connection strings.
 
-## Architecture
+---
 
-![Architecture diagram](docs/architecture.png)
+# Architecture
 
-## Azure Resources
+![Solution Architecture](docs/architecture.png)
 
--   Resource Group
--   App Service Plan (Windows)
--   Azure App Service (.NET 8)
--   Logic App (Consumption)
--   Storage Account
--   Blob Container (`api-output`)
+---
 
-## Flow
+# Solution Workflow
 
-1.  ASP.NET Core API exposes `GET /api/hello`.
-2.  Logic App runs on a Recurrence trigger.
-3.  HTTP action calls the API.
-4.  Blob Storage connector creates a timestamped JSON file.
-5.  Blob is stored in `api-output`.
+```text
+                Azure App Service
+               (.NET 8 Web API)
+                       │
+                 HTTP GET Request
+                       │
+                       ▼
+                Azure Logic App
+            (Recurrence Trigger)
+                       │
+                       ▼
+        Azure Blob Storage Connector
+        (Managed Identity Authentication)
+                       │
+                       ▼
+          Azure Blob Storage Container
+              (api-output)
+```
 
-## Security
+---
 
--   Logic App uses a System Assigned Managed Identity.
--   Managed Identity is assigned the **Storage Blob Data Contributor**
-    role.
+# Features
 
-## Sample Response
+- ASP.NET Core (.NET 8) REST API
+- Azure App Service
+- Azure Logic App (Consumption)
+- Azure Blob Storage
+- Managed Identity Authentication
+- Azure RBAC
+- Dynamic blob naming using UTC timestamp
+- Passwordless authentication
 
-``` json
+---
+
+# Azure Services Used
+
+| Service | Purpose |
+|----------|----------|
+| Azure App Service | Hosts the REST API |
+| Azure Logic Apps | Workflow orchestration |
+| Azure Blob Storage | Stores JSON payload |
+| Managed Identity | Secure authentication |
+| Azure RBAC | Authorization to Blob Storage |
+
+---
+
+# Repository Structure
+
+```text
+LCT_DEMOAPIBLOBCONNECTPOC
+│
+├── api
+│   └── HelloApi
+│       ├── Controllers
+│       ├── Properties
+│       ├── appsettings.json
+│       ├── appsettings.Development.json
+│       ├── HelloApi.csproj
+│       ├── HelloApi.http
+│       └── Program.cs
+│
+├── docs
+│   ├── architecture.png
+│   ├── api-response.png
+│   └── setup.md
+│
+├── logic-app
+│   ├── workflow.json
+│   └── screenshots
+│
+├── .gitignore
+└── README.md
+```
+
+---
+
+# API Endpoint
+
+```
+GET /api/hello
+```
+
+Example Response
+
+```json
 {
-  "application": "Hello API",
-  "message": "Hello World",
-  "timestamp": "2026-07-16T13:15:30Z"
+    "application": "Hello API",
+    "message": "Hello World",
+    "timestamp": "2026-07-16T18:40:12Z"
 }
 ```
+
+---
+
+# Sample API Response
+
+> Add a screenshot of the API response here.
+
+![API Response](docs/api-response.png)
+
+---
+
+# Logic App Workflow
+
+The Logic App performs the following steps:
+
+1. Triggered on a Recurrence schedule.
+2. Sends an HTTP GET request to the Azure App Service.
+3. Receives the JSON response.
+4. Generates a blob name using the current UTC timestamp.
+5. Creates a JSON blob in Azure Blob Storage.
+
+The workflow definition is available here:
+
+```
+logic-app/workflow.json
+```
+
+---
+
+# Security
+
+This solution follows Azure security best practices.
+
+- ✅ System Assigned Managed Identity
+- ✅ Azure RBAC
+- ✅ Storage Blob Data Contributor Role
+- ✅ No Storage Account Keys
+- ✅ No Connection Strings
+
+---
+
+# Dynamic Blob Naming
+
+Each execution generates a unique filename.
+
+Example:
+
+```
+HelloApi_20260716_191530.json
+```
+
+Expression used inside Logic App:
+
+```text
+concat(
+'HelloApi_',
+formatDateTime(utcNow(),'yyyyMMdd_HHmmss'),
+'.json'
+)
+```
+
+---
+
+# Setup Guide
+
+Detailed deployment instructions are available in:
+
+```
+docs/setup.md
+```
+
+The guide includes:
+
+- Creating Azure resources
+- Deploying the API
+- Configuring Managed Identity
+- Assigning Azure RBAC
+- Creating the Logic App
+- Testing the solution
+- Troubleshooting
+
+---
+
+# Troubleshooting
+
+One issue encountered during development:
+
+### IIS "You do not have permission to view this directory or page"
+
+Cause:
+
+The project source folder was deployed instead of the published application.
+
+Resolution:
+
+Run
+
+```bash
+dotnet publish -c Release
+```
+
+Deploy the contents of
+
+```
+bin/Release/net8.0/publish
+```
+
+instead of the project root.
+
+---
+
+# Learning Outcomes
+
+This PoC demonstrates:
+
+- Azure App Service deployment
+- ASP.NET Core REST APIs
+- Azure Logic Apps
+- Managed Identity
+- Azure RBAC
+- Azure Blob Storage
+- Dynamic Expressions
+- Secure Azure Integration
+- Troubleshooting Azure App Service deployments
+
+---
+
+# Future Enhancements
+
+This repository will be extended with:
+
+- Azure API Management
+- Azure Event Grid
+- Azure Service Bus
+- Azure Event Hubs
+- Azure Functions
+- Azure Key Vault
+- Application Insights
+- Terraform
+- Azure DevOps CI/CD
+- Private Endpoints
+
+---
+
+# Author
+
+**Supriyo Sarkar**
+
+Azure | DevOps | Kubernetes | Terraform | Azure Integration
