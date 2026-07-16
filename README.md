@@ -201,13 +201,13 @@ Resolution:
 Run
 
 ```bash
-dotnet publish -c Release
+dotnet publish -c Release -o ./bin/Publish
 ```
 
 Deploy the contents of
 
 ```
-bin/Release/net8.0/publish
+bin/Publish
 ```
 
 instead of the project root.
