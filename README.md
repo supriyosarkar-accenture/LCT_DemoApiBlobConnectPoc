@@ -110,8 +110,6 @@ Example Response
 
 # Sample API Response
 
-> Add a screenshot of the API response here.
-
 ![API Response](docs/api-response.png)
 
 ---
