@@ -38,3 +38,16 @@ module "logic_app" {
   location            = module.resource_group.location
   tags                = local.common_tags
 }
+
+module "rbac" {
+  source = "./modules/rbac"
+
+  scope                = module.storage_account.storage_account_id
+  principal_id         = module.logic_app.principal_id
+  role_definition_name = "Storage Blob Data Contributor"
+
+  depends_on = [
+    module.storage_account,
+    module.logic_app
+  ]
+}
