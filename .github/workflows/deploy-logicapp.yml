@@ -1,0 +1,48 @@
+name: Deploy Logic App Workflow
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
+  LOGIC_APP_NAME: ${{ vars.LOGIC_APP_NAME }}
+  WORKFLOW_FILE: logic-app/workflow.json
+
+jobs:
+
+  deploy-logicapp:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Display Workflow
+        run: cat $WORKFLOW_FILE
+
+      - name: Deploy Logic App Workflow
+        run: |
+          az resource update \
+            --resource-group $RESOURCE_GROUP \
+            --resource-type Microsoft.Logic/workflows \
+            --name $LOGIC_APP_NAME \
+            --set properties.definition=@$WORKFLOW_FILE
+
+      - name: Verify Deployment
+        run: |
+          az logic workflow show \
+            --resource-group $RESOURCE_GROUP \
+            --name $LOGIC_APP_NAME

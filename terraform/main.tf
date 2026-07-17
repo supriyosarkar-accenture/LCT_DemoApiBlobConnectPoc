@@ -51,3 +51,25 @@ module "rbac" {
     module.logic_app
   ]
 }
+
+data "azurerm_managed_api" "azureblob" {
+  name     = "azureblob"
+  location = module.resource_group.location
+}
+
+data "azurerm_client_config" "current" {}
+
+module "api_connection" {
+  source = "./modules/api-connection"
+
+  providers = {
+    azapi = azapi
+  }
+
+  name                   = "azureblob"
+  resource_group_id      = module.resource_group.id
+  location               = module.resource_group.location
+  managed_api_id         = data.azurerm_managed_api.azureblob.id
+  logic_app_principal_id = module.logic_app.principal_id
+  tenant_id              = data.azurerm_client_config.current.tenant_id
+}

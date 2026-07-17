@@ -9,26 +9,21 @@
             "Recurrence": {
                 "type": "Recurrence",
                 "recurrence": {
+                    "frequency": "Day",
                     "interval": 1,
-                    "frequency": "Month",
-                    "timeZone": "India Standard Time"
+                    "timeZone": "India Standard Time",
+                    "schedule": {
+                        "hours": [
+                            0
+                        ],
+                        "minutes": [
+                            1
+                        ]
+                    }
                 }
             }
         },
         "actions": {
-            "HTTP": {
-                "type": "Http",
-                "inputs": {
-                    "uri": "https://helloapi-c0cqheg0fef4begj.centralindia-01.azurewebsites.net/api/hello",
-                    "method": "GET"
-                },
-                "runAfter": {},
-                "runtimeConfiguration": {
-                    "contentTransfer": {
-                        "transferMode": "Chunked"
-                    }
-                }
-            },
             "Compose": {
                 "type": "Compose",
                 "inputs": "@concat('HelloApi_',formatDateTime(utcNow(),'yyyyMMdd_HHmmss'),'.json')",
@@ -63,6 +58,19 @@
                         "Succeeded"
                     ]
                 },
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                }
+            },
+            "HTTP": {
+                "type": "Http",
+                "inputs": {
+                    "uri": "https://helloapi-c0cqheg0fef4begj.centralindia-01.azurewebsites.net/api/hello",
+                    "method": "GET"
+                },
+                "runAfter": {},
                 "runtimeConfiguration": {
                     "contentTransfer": {
                         "transferMode": "Chunked"
